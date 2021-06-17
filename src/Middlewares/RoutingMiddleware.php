@@ -20,7 +20,7 @@ class RoutingMiddleware implements MiddlewareInterface
 	{
 		$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
             // API
-            $r->addRoute(Request::METHOD_GET, "/match", ["MatchingDispatcher", "match"]);
+            $r->addRoute(Request::METHOD_POST, "/match", ["MatchingDispatcher", "match"]);
         });
 
 		$httpMethod = $request->getMethod();
