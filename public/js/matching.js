@@ -133,6 +133,7 @@ function prepareAverageScore(response) {
 
 // Errors
 function displayErrorMessage(err) {
+    resetContent();
     errorsElement.innerText = err[errors_key][message_key];
     errorsElement.hidden = false;
 }
