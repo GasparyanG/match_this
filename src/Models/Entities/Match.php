@@ -66,4 +66,32 @@ class Match
     {
         $this->pair->last->setChosen(true);
     }
+
+    public function releaseFirst(): void
+    {
+        $this->pair->first->setChosen(false);
+    }
+
+    public function releaseLast(): void
+    {
+        $this->pair->last->setChosen(false);
+    }
+
+    public function bind(): void
+    {
+        $first = $this->pair->first;
+        $last = $this->pair->last;
+
+        $first->setConnection($last);
+        $last->setConnection($first);
+    }
+
+    public function separate(): void
+    {
+        $first = $this->pair->first;
+        $last = $this->pair->last;
+
+        $first->setConnection(null);
+        $last->setConnection(null);
+    }
 }

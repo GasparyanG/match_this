@@ -18,6 +18,8 @@ class Employee
     */
     private array $scoring = [];
 
+    private ?Employee $connection = null;
+
     // Fields
     private string $name;
     private string $email;
@@ -141,6 +143,22 @@ class Employee
     public function addScore(Match $match): void
     {
         $this->scoring[] = $match;
+    }
+
+    /**
+     * @return Employee|null
+     */
+    public function getConnection(): ?Employee
+    {
+        return $this->connection;
+    }
+
+    /**
+     * @param Employee|null $connection
+     */
+    public function setConnection(?Employee $connection): void
+    {
+        $this->connection = $connection;
     }
 
     public function repr(): string

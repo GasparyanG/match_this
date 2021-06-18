@@ -23,17 +23,16 @@ class OptimalCombination extends AbstractAverageMatching implements AverageMatch
 
         $employee = $employees[$index];
         if ($employee->isChosen()) {
-            $this->operateOnTheNext($employees, $employee, $index + 1);
+            $this->operateOnTheNext($employees, $employee, $index);
         } else {
             foreach ($employee->getScoring() as $match) {
                 if ($match->firstIsChosen() || $match->lastIsChosen())
                     continue;
 
                 $this->add($match);
-                $this->operateOnTheNext($employees, $employee, $index + 1);
+                $this->operateOnTheNext($employees, $employee, $index);
+                $this->resetMatch($match);
             }
-
-            $this->resetEmployee($employee);
         }
     }
 
@@ -57,6 +56,8 @@ class OptimalCombination extends AbstractAverageMatching implements AverageMatch
         $match->chooseFirst();
         $match->chooseLast();
 
+        $match->bind();
+
         $this->draftCombination[] = $match;
     }
 
@@ -72,6 +73,9 @@ class OptimalCombination extends AbstractAverageMatching implements AverageMatch
     private function resetEmployee(Employee $employee): void
     {
         $employee->setChosen(false);
+
+        if ($employee->getConnection())
+            $employee->getConnection()->setChosen(false);
     }
 
     /**
@@ -88,5 +92,13 @@ class OptimalCombination extends AbstractAverageMatching implements AverageMatch
     public function setCombination(array $combination): void
     {
         $this->combination = $combination;
+    }
+
+    private function resetMatch(Match $match): void
+    {
+        $match->releaseFirst();
+        $match->releaseLast();
+
+        $match->separate();
     }
 }
