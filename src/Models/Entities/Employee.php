@@ -137,6 +137,12 @@ class Employee
         $this->scoring = $scoring;
     }
 
+
+    public function addScore(Match $match): void
+    {
+        $this->scoring[] = $match;
+    }
+
     public function repr(): string
     {
         return
@@ -145,5 +151,15 @@ class Employee
             . "division: " . $this->division . "\n"
             . "age: " . $this->age . "\n"
             . "timezone: " . $this->timezone . "\n";
+    }
+
+    public function scoreRepr(): string
+    {
+        $repr = "";
+        foreach ($this->scoring as $score) {
+            $repr .= $score->emailCombination() . ": " . $score->getPercent() . "\n";
+        }
+
+        return $repr;
     }
 }

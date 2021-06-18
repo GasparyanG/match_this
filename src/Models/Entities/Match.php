@@ -40,4 +40,10 @@ class Match
     {
         $this->pair = $pair;
     }
+
+    public function emailCombination(): string
+    {
+        return $this->pair->first->getEmail() . " | "
+            . $this->pair->last->getEmail();
+    }
 }

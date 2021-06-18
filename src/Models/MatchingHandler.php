@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\EntityOperations\EmployeeHelper;
+use App\Models\EntityOperations\EmployeeScore;
 use Symfony\Component\HttpFoundation\Request;
 
 class MatchingHandler
@@ -14,8 +15,11 @@ class MatchingHandler
 
         $employees = EmployeeHelper::prepareEmployees($structuredFile);
 
-        foreach ($employees as $employee)
-            file_put_contents("test", $employee->repr() . "\n\n", 8);
+        foreach ($employees as $employee) {
+            EmployeeScore::prepareEmployeeMatches($employee, $employees);
+
+            file_put_contents("test", $employee->scoreRepr(), 8);
+        }
 
         return ["test" => true];
     }
