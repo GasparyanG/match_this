@@ -15,11 +15,8 @@ class MatchingHandler
 
         $employees = EmployeeHelper::prepareEmployees($structuredFile);
 
-        foreach ($employees as $employee) {
+        foreach ($employees as $employee)
             EmployeeScore::prepareEmployeeMatches($employee, $employees);
-
-            file_put_contents("test", $employee->scoreRepr(), 8);
-        }
 
         return ["test" => true];
     }
