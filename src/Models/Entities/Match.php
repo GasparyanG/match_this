@@ -46,4 +46,24 @@ class Match
         return $this->pair->first->getEmail() . " | "
             . $this->pair->last->getEmail();
     }
+
+    public function firstIsChosen(): bool
+    {
+        return $this->pair->first->isChosen();
+    }
+
+    public function lastIsChosen(): bool
+    {
+        return $this->pair->last->isChosen();
+    }
+
+    public function chooseFirst(): void
+    {
+        $this->pair->first->setChosen(true);
+    }
+
+    public function chooseLast(): void
+    {
+        $this->pair->last->setChosen(true);
+    }
 }
