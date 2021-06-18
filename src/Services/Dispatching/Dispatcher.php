@@ -17,7 +17,6 @@ class Dispatcher implements DispatchingInterface
 		return $controller->$methodName($request, $placeholders);
 	}
 
-	// TODO define controller interface
 	private function instantiateController(RoutingInformationHandlerInterface $routingInformationHandler)
 	{
 		$controllerName = $routingInformationHandler->getControllerName();

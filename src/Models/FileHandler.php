@@ -4,6 +4,9 @@
 namespace App\Models;
 
 
+use App\Services\API\JsonAPI\Error;
+use Symfony\Component\HttpFoundation\Response;
+
 class FileHandler
 {
     // Keys
@@ -15,6 +18,12 @@ class FileHandler
     const LINE_LENGTH = 1000;
     const FIRST_ROW = 0;
     const SEPARATOR = ",";
+
+    // Errors
+    const INVALID_FILE = "File is not valid.";
+    const NO_FILE = "No file provided.";
+
+    private bool $isValid = true;
 
     static array $validExtensions = [
         "csv",
@@ -45,9 +54,10 @@ class FileHandler
 
     public function getStructuredFile(): array
     {
-        if(!$this->isValidFile())
-            // TODO: Handle errors properly
-            return ["error" => "file is not valid"];
+        if(!$this->isValidFile()) {
+            $this->isValid = false;
+            return $this->error(self::INVALID_FILE, Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         return $this->structuredFile();
     }
@@ -70,10 +80,10 @@ class FileHandler
     {
         $rowsToReturn = [];
 
-        if (!$this->tempFilename()) return []; // TODO: handle file doesn't exits error.
-
-        if ($this->handle === false)
-            return []; // TODO: handle file doesn't exits error.
+        if (!$this->tempFilename() || $this->handle === false) {
+            $this->isValid = false;
+            return $this->error(self::NO_FILE, Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         $row = self::FIRST_ROW;
         $fields = $this->createFieldsArray();
@@ -111,4 +121,30 @@ class FileHandler
         return $this->files[self::FILENAME][self::TEMP_NAME] ?? null;
     }
 
+    /**
+     * @return bool
+     */
+    public function isValid(): bool
+    {
+        return $this->isValid;
+    }
+
+    /**
+     * @param bool $isValid
+     */
+    public function setIsValid(bool $isValid): void
+    {
+        $this->isValid = $isValid;
+    }
+
+    private function error(string $message, int $code): array
+    {
+        $error = new Error();
+        $error->setTitle(Response::$statusTexts[$code]);
+        $error->setStatus($code);
+        $error->setErrors([Error::MESSAGE => $message]);
+
+        $error->arrayRepresentation();
+        return $error->getRepresentation();
+    }
 }

@@ -17,22 +17,22 @@ class Error
     /**
      * @var array $representation
      */
-    private $representation = [];
+    private array $representation = [];
 
     /**
      * @var array $error
     */
-    private $errors = [];
+    private array $errors = [];
 
     /**
      * @var string|null $title
      */
-    private $title = null;
+    private ?string $title = null;
 
     /**
      * @var string|null $status
      */
-    private $status = null;
+    private ?string $status = null;
 
     public function arrayRepresentation(): void
     {

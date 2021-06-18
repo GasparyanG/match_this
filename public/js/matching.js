@@ -1,18 +1,24 @@
 // Minimal configuration
 const matchesId = "matches";
 const totalId = "total";
+const errorsId = "errors";
 
 // Attributes
 const email_key = "email";
 const percent_key = "percent";
 const average_key = "average";
-const data_key = "data"
-const attributes_key = "attributes"
-const meta_key = "meta"
+const data_key = "data";
+const attributes_key = "attributes";
+const meta_key = "meta";
+const errors_key = "errors";
+const message_key = "message";
 
 // Elements
 let matchesElement = document.getElementById(matchesId);
 let totalElement = document.getElementById(totalId);
+
+let errorsElement = document.getElementById(errorsId);
+errorsElement.hidden = true;
 
 // Functionality
 function match() {
@@ -33,10 +39,19 @@ function match() {
                 if(response != 0) {
                     response = JSON.parse(response);
                     displayMatchings(response)
-                } else{
+                } else {
                     alert('file not uploaded');
                 }
             },
+            error: function (e) {
+                if (!e.responseText)
+                    return;
+
+                let err = JSON.parse(e.responseText);
+                if (err[errors_key]) {
+                    displayErrorMessage(err);
+                }
+            }
         });
     } else {
         alert("Please select a file.");
@@ -46,6 +61,10 @@ function match() {
 function resetContent() {
     matchesElement.innerHTML = "";
     totalElement.innerHTML = "";
+
+    // Error element
+    errorsElement.innerHTML = "";
+    errorsElement.hidden = true;
 }
 
 function displayMatchings(response) {
@@ -110,4 +129,10 @@ function prepareMatchRow(array) {
 
 function prepareAverageScore(response) {
     totalElement.innerText = response[meta_key][average_key] + "%";
+}
+
+// Errors
+function displayErrorMessage(err) {
+    errorsElement.innerText = err[errors_key][message_key];
+    errorsElement.hidden = false;
 }

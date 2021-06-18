@@ -10,7 +10,6 @@ use App\Models\Entities\Match;
 use App\Models\EntityOperations\EmployeeHelper;
 use App\Models\EntityOperations\EmployeeScore;
 use App\Services\API\JsonAPI\Resource;
-use Symfony\Component\HttpFoundation\Request;
 
 class MatchingHandler
 {
@@ -19,6 +18,8 @@ class MatchingHandler
         // Prepare desired structure from provided format.
         $fileHandler = new FileHandler();
         $structuredFile = $fileHandler->getStructuredFile();
+        if (!$fileHandler->isValid())
+            return $structuredFile;
 
         // Prepare employees with scoring.
         $employees = EmployeeHelper::prepareEmployees($structuredFile);
