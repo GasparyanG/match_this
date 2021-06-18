@@ -12,7 +12,7 @@ class MatchingDispatcher
     {
         // Prepare processed csv file and return it to a client.
         $matchModel = new MatchingHandler();
-        $processedFile = $matchModel->match($req);
+        $processedFile = $matchModel->match();
 
         return new Response(json_encode($processedFile));
     }

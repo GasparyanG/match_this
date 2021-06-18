@@ -5,9 +5,14 @@ namespace App\Models\AverageMatchingEngine;
 
 
 use App\Models\Entities\Match;
+use http\Encoding\Stream\Deflate;
 
 abstract class AbstractAverageMatching
 {
+    const AVERAGE = "average";
+    const DECIMALS = 2;
+    const SEPARATOR = '.';
+
     const STRATEGY = null;
 
     /**
@@ -26,7 +31,7 @@ abstract class AbstractAverageMatching
         foreach ($this->combination as $match)
             $repr .= $match->emailCombination() . ": " . $match->getPercent() . "\n";
 
-        $repr .= "Total: " . $this->total($this->combination) . "\n\n";
+        $repr .= "Total: " . self::total($this->combination) . "\n\n";
         return $repr;
     }
 
@@ -34,12 +39,22 @@ abstract class AbstractAverageMatching
      * @param Match[] $combination
      * @return int
      */
-    protected function total(array $combination): int
+    protected static function total(array $combination): int
     {
         $result = 0;
         foreach ($combination as $match)
             $result += $match->getPercent();
 
         return $result;
+    }
+
+    /**
+     * @param Match[] $combination
+     * @return float
+     */
+    public static function average(array $combination): float
+    {
+        return number_format((float)(self::total($combination) / count($combination)),
+            self::DECIMALS, self::SEPARATOR, '');
     }
 }

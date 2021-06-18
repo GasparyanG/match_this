@@ -6,6 +6,8 @@ namespace App\Models\Entities;
 
 class Match
 {
+    const PERCENT = "percent";
+
     private int $percent = 0;
     private ?Pair $pair = null;
 

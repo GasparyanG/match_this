@@ -5,6 +5,7 @@ namespace App\Models\AverageMatchingEngine;
 
 
 use App\Models\Entities\Employee;
+use App\Models\Entities\Match;
 
 interface AverageMatchingInterface
 {
@@ -19,4 +20,9 @@ interface AverageMatchingInterface
      * @param int $index
      */
     public function process(array $employees, int $index = 0): void;
+
+    /**
+     * @return Match[]
+     */
+    public function getCombination(): array;
 }

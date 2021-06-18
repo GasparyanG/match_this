@@ -44,7 +44,7 @@ class OptimalCombination extends AbstractAverageMatching implements AverageMatch
     private function update(): void
     {
         if (count($this->combination) === 0 ||
-            ($this->total($this->combination) < $this->total($this->draftCombination)))
+            (self::total($this->combination) < self::total($this->draftCombination)))
             $this->combination = $this->draftCombination;
 
         $this->draftCombination = [];
@@ -79,7 +79,7 @@ class OptimalCombination extends AbstractAverageMatching implements AverageMatch
     }
 
     /**
-     * @return Match[]
+     * {@inheritDoc}
      */
     public function getCombination(): array
     {
