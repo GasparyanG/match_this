@@ -10,6 +10,11 @@ class OptimalCombination extends AbstractAverageMatching implements AverageMatch
     const STRATEGY = 0;
 
     /**
+     * @var Match[] $combination
+     */
+    private array $draftCombination = [];
+
+    /**
      * {@inheritDoc}
      */
     public function process(array $employees, int $index = 0): void
@@ -39,7 +44,11 @@ class OptimalCombination extends AbstractAverageMatching implements AverageMatch
 
     private function update(): void
     {
-        // Update combination.
+        if (count($this->combination) === 0 ||
+            ($this->total($this->combination) < $this->total($this->draftCombination)))
+            $this->combination = $this->draftCombination;
+
+        $this->draftCombination = [];
     }
 
 
@@ -48,7 +57,7 @@ class OptimalCombination extends AbstractAverageMatching implements AverageMatch
         $match->chooseFirst();
         $match->chooseLast();
 
-        // Add to combination.
+        $this->draftCombination[] = $match;
     }
 
     private function operateOnTheNext(array $employees, Employee $employee, int $index): void
@@ -63,5 +72,21 @@ class OptimalCombination extends AbstractAverageMatching implements AverageMatch
     private function resetEmployee(Employee $employee): void
     {
         $employee->setChosen(false);
+    }
+
+    /**
+     * @return Match[]
+     */
+    public function getCombination(): array
+    {
+        return $this->combination;
+    }
+
+    /**
+     * @param Match[] $combination
+     */
+    public function setCombination(array $combination): void
+    {
+        $this->combination = $combination;
     }
 }

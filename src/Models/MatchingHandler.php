@@ -23,7 +23,7 @@ class MatchingHandler
         $averageMatchingStrategy = AverageMatchingFactory::create(OptimalCombination::STRATEGY);
         $averageMatchingStrategy->process($employees);
 
-        // TODO: Get result and send it to controller.
+        file_put_contents("test", $averageMatchingStrategy->reprTheCombination(), 8);
 
         return ["test" => true];
     }
