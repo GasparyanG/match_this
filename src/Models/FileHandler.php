@@ -92,6 +92,9 @@ class FileHandler
         if (($data = $this->getDataOfTheRow()) === null)
             return []; // TODO: handle empty array case.
 
+        for ($i = 0; $i < count($data); $i++)
+            $data[$i] = strtolower($data[$i]);
+
         return $data;
     }
 
